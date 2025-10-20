@@ -1,0 +1,39 @@
+﻿@page "/"
+@page "/home"
+
+<h1>欢迎来到首页</h1>
+<p>当前时间: @DateTime.Now</p>
+@if (isLoading)
+{
+    <p>加载中...</p>
+}
+else
+{
+    <p>加载完成！</p>
+}
+@if (userRole == "Admin")
+{
+    <p>欢迎管理员！</p>
+}
+else if (userRole == "User")
+{
+    <p>欢迎普通用户！</p>
+}
+else
+{
+    <p>请登录。</p>
+}
+@code {
+    private bool isLoading = true;
+    private string userRole = "Admin";
+    protected override void OnInitialized()
+    {
+        // 模拟加载完成
+        Task.Delay(2000).ContinueWith(_ =>
+        {
+            isLoading = false;
+            InvokeAsync(StateHasChanged);
+        });
+    }
+
+}

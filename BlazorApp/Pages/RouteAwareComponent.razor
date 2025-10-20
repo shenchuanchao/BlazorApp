@@ -1,0 +1,28 @@
+﻿<!-- Pages/RouteAwareComponent.razor -->
+@page "/aware"
+@inject NavigationManager Navigation
+@implements IDisposable
+
+<h1>路由感知组件</h1>
+<p>位置变化次数: @locationChangeCount</p>
+
+@code {
+    private int locationChangeCount = 0;
+
+    protected override void OnInitialized()
+    {
+        Navigation.LocationChanged += OnLocationChanged;
+    }
+
+    private void OnLocationChanged(object? sender, LocationChangedEventArgs e)
+    {
+        locationChangeCount++;
+        Console.WriteLine($"位置变化: {e.Location}");
+        StateHasChanged(); // 通知组件重新渲染
+    }
+
+    public void Dispose()
+    {
+        Navigation.LocationChanged -= OnLocationChanged;
+    }
+}

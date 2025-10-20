@@ -1,0 +1,23 @@
+﻿@inherits LayoutComponentBase
+@layout ProductionsLayout
+
+<PageTitle>Doctor Who® Database</PageTitle>
+<header>
+    <h1>Doctor Who® Database</h1>
+</header>
+<nav>
+    <a href="main-episode-list">Main Episode List</a>
+    <a href="episode-search">Search</a>
+    <a href="new-episode">Add Episode</a>
+</nav>
+
+@Body
+
+<footer>
+    @TrademarkMessage
+</footer>
+
+@code {
+    public string TrademarkMessage { get; set; } =
+        "CSharp精选营";
+}

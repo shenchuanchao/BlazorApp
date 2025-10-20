@@ -1,0 +1,27 @@
+﻿<!-- ParentComponent.razor -->
+@page "/custom"
+
+<div class="parent-demo">
+    <h3>自定义组件双向绑定</h3>
+
+    <CustomInput @bind-Value="userName"
+                 Label="用户名"
+                 Placeholder="请输入用户名" />
+
+    <CustomInput @bind-Value="email"
+                 Label="邮箱"
+                 Placeholder="请输入邮箱地址"
+                 ValidationMessage="@(IsValidEmail ? "" : "邮箱格式不正确")" />
+
+    <div class="result">
+        <p>用户名: @userName</p>
+        <p>邮箱: @email</p>
+    </div>
+</div>
+
+@code {
+    private string userName = string.Empty;
+    private string email = string.Empty;
+
+    private bool IsValidEmail => email.Contains("@") && email.Contains(".");
+}

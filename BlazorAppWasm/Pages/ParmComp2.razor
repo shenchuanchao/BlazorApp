@@ -1,0 +1,18 @@
+﻿<h3>Hello @NickName</h3>
+
+@if (AdditionalInfo != null)
+{
+    foreach (var kv in this.AdditionalInfo)
+    {
+        <p>@kv.Key:@kv.Value</p>
+    }
+}
+<input @attributes="AdditionalInfo" />
+
+@code {
+    [Parameter]
+    public string NickName { get; set; }
+
+    [Parameter(CaptureUnmatchedValues = true)]
+    public IDictionary<string, object> AdditionalInfo { get; set; }
+}

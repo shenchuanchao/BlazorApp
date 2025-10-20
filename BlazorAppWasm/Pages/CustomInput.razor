@@ -1,0 +1,39 @@
+﻿<!-- CustomInput.razor -->
+
+<div class="custom-input">
+    <label>@Label</label>
+    <input value="@Value"
+           @oninput="HandleInput"
+           class="form-control @AdditionalClass"
+           placeholder="@Placeholder" />
+    @if (!string.IsNullOrEmpty(ValidationMessage))
+    {
+        <div class="text-danger">@ValidationMessage</div>
+    }
+</div>
+
+@code {
+    [Parameter]
+    public string Value { get; set; } = string.Empty;
+
+    [Parameter]
+    public EventCallback<string> ValueChanged { get; set; }
+
+    [Parameter]
+    public string Label { get; set; } = string.Empty;
+
+    [Parameter]
+    public string Placeholder { get; set; } = string.Empty;
+
+    [Parameter]
+    public string AdditionalClass { get; set; } = string.Empty;
+
+    [Parameter]
+    public string ValidationMessage { get; set; } = string.Empty;
+
+    private async Task HandleInput(ChangeEventArgs e)
+    {
+        Value = e.Value?.ToString() ?? string.Empty;
+        await ValueChanged.InvokeAsync(Value);
+    }
+}

@@ -1,0 +1,26 @@
+﻿<!-- Pages/UserManagement.razor -->
+@page "/users"
+@page "/users/{Action}/{Id:int}"
+
+<h1>用户管理</h1>
+
+@if (Action == "edit" && Id > 0)
+{
+    <UserEditor UserId="@Id" />
+}
+else if (Action == "create")
+{
+    <UserCreator />
+}
+else
+{
+    <UserList />
+}
+
+@code {
+    [Parameter]
+    public string? Action { get; set; }
+
+    [Parameter]
+    public int Id { get; set; }
+}

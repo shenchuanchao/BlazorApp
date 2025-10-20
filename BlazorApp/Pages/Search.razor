@@ -1,0 +1,37 @@
+﻿<!-- Pages/Search.razor -->
+@page "/search"
+@inject NavigationManager Navigation
+
+<h1>搜索页面</h1>
+
+<input @bind="searchTerm" placeholder="输入搜索关键词" />
+<button @onclick="PerformSearch" class="btn btn-primary">搜索</button>
+
+@if (!string.IsNullOrEmpty(SearchTerm))
+{
+    <p>搜索关键词: @SearchTerm</p>
+}
+
+@code {
+    private string searchTerm = string.Empty;
+
+    [Parameter]
+    [SupplyParameterFromQuery(Name = "q")]
+    public string? SearchTerm { get; set; }
+
+    protected override void OnParametersSet()
+    {
+        if (!string.IsNullOrEmpty(SearchTerm))
+        {
+            searchTerm = SearchTerm;
+        }
+    }
+
+    private void PerformSearch()
+    {
+        var query = System.Web.HttpUtility.ParseQueryString(string.Empty);
+        query["q"] = searchTerm;
+
+        Navigation.NavigateTo($"/search?{query}");
+    }
+}

@@ -1,0 +1,58 @@
+﻿<!-- TwoWayBinding.razor -->
+<div class="two-way-demo">
+    <h3>双向绑定示例</h3>
+
+    <div class="form-group">
+        <label>用户名:</label>
+        <input @bind="userName" class="form-control" />
+        <small>显示: @userName</small>
+    </div>
+
+    <div class="form-group">
+        <label>邮箱:</label>
+        <input @bind="email" class="form-control" />
+        <small>显示: @email</small>
+    </div>
+
+    <div class="form-group">
+        <label>年龄:</label>
+        <input @bind="age" type="number" class="form-control" />
+        <small>显示: @age</small>
+    </div>
+
+    <div class="form-group">
+        <label>城市:</label>
+        <select @bind="selectedCity" class="form-control">
+            <option value="">请选择</option>
+            <option value="Beijing">北京</option>
+            <option value="Shanghai">上海</option>
+            <option value="Guangzhou">广州</option>
+            <option value="Shenzhen">深圳</option>
+        </select>
+        <small>选择: @selectedCity</small>
+    </div>
+
+    <div class="form-group">
+        <label>是否同意协议:</label>
+        <input type="checkbox" @bind="isAgreed" />
+        <span>@(isAgreed ? "已同意" : "未同意")</span>
+    </div>
+
+    <!-- 显示汇总信息 -->
+    <div class="summary">
+        <h4>汇总信息:</h4>
+        <p>用户名: @userName</p>
+        <p>邮箱: @email</p>
+        <p>年龄: @age</p>
+        <p>城市: @selectedCity</p>
+        <p>同意协议: @isAgreed</p>
+    </div>
+</div>
+
+@code {
+    private string userName = string.Empty;
+    private string email = string.Empty;
+    private int age = 0;
+    private string selectedCity = string.Empty;
+    private bool isAgreed = false;
+}

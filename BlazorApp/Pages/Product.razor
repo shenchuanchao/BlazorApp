@@ -1,0 +1,27 @@
+﻿<!-- Pages/Product.razor -->
+@page "/product/{Id:int}"
+@page "/product/{Category}/{Id:int}"
+
+<h1>产品页面</h1>
+
+@if (string.IsNullOrEmpty(Category))
+{
+    <p>所有产品</p>
+}
+else
+{
+    <p>分类: @Category</p>
+}
+
+@if (Id > 0)
+{
+    <p>产品ID: @Id</p>
+}
+
+@code {
+    [Parameter]
+    public string? Category { get; set; }
+
+    [Parameter]
+    public int Id { get; set; }
+}

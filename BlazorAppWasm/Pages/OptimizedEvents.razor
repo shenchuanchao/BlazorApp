@@ -1,0 +1,74 @@
+﻿<!-- OptimizedEvents.razor -->
+<div class="optimized-events">
+    <h3>事件处理性能优化</h3>
+
+    <!-- 避免内联Lambda表达式（可能引起不必要的重渲染） -->
+    @foreach (var item in items)
+    {
+        <div class="item" @key="item.Id">
+            <span>@item.Name</span>
+            <!-- 好的做法：使用方法引用 -->
+            <button @onclick="() => DeleteItem(item.Id)" class="btn btn-sm btn-danger">删除</button>
+        </div>
+    }
+
+    <!-- 大量事件考虑使用事件委托 -->
+    <div class="large-list">
+        @foreach (var item in largeList)
+        {
+            <div class="list-item" data-id="@item.Id" data-name="@item.Name" @onclick="(e) => HandleListItemClick(e, item.Id)">
+                @item.Name
+            </div>
+        }
+    </div>
+
+    <div class="action-log">
+        <h4>操作日志:</h4>
+        <ul>
+            @foreach (var log in actionLogs.TakeLast(5).Reverse())
+            {
+                <li>@log</li>
+            }
+        </ul>
+    </div>
+</div>
+
+@code {
+    private List<Item> items = new List<Item>
+    {
+        new Item { Id = 1, Name = "项目1" },
+        new Item { Id = 2, Name = "项目2" },
+        new Item { Id = 3, Name = "项目3" }
+    };
+
+    private List<Item> largeList = Enumerable.Range(1, 100)
+        .Select(i => new Item { Id = i, Name = $"项目{i}" })
+        .ToList();
+
+    private List<string> actionLogs = new List<string>();
+
+    private void DeleteItem(int id)
+    {
+        items.RemoveAll(i => i.Id == id);
+        LogAction($"删除了项目 {id}");
+    }
+
+    private void HandleListItemClick(MouseEventArgs e, int itemId)
+    {
+        // 通过参数 itemId 就知道是哪个按钮被点击了
+        Console.WriteLine($"Clicked item ID: {itemId}");
+    }
+
+    // 添加 LogAction 方法
+    private void LogAction(string action)
+    {
+        actionLogs.Add($"{DateTime.Now:HH:mm:ss} - {action}");
+        StateHasChanged();
+    }
+
+    class Item
+    {
+        public int Id { get; set; }
+        public string Name { get; set; } = string.Empty;
+    }
+}

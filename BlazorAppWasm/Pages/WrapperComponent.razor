@@ -1,0 +1,12 @@
+﻿<!-- WrapperComponent.razor -->
+<ThirdPartyComponent @attributes="AdditionalAttributes" 
+                     SpecificParameter="@SpecificValue" />
+
+@code {
+    [Parameter]
+    public string SpecificValue { get; set; } = string.Empty;
+    
+    [Parameter(CaptureUnmatchedValues = true)]
+    public Dictionary<string, object> AdditionalAttributes { get; set; } = 
+        new Dictionary<string, object>();
+}

@@ -1,0 +1,32 @@
+﻿<!-- Pages/NavigationDemo.razor -->
+@page "/navigation"
+@inject NavigationManager Navigation
+
+<h1>导航演示</h1>
+
+<button @onclick="GoToHome" class="btn btn-primary">返回首页</button>
+<button @onclick="GoToUserProfile" class="btn btn-secondary">查看用户资料</button>
+<button @onclick="GoBack" class="btn btn-outline">返回上一页</button>
+<button @onclick="OpenExternal" class="btn btn-info">打开外部链接</button>
+
+@code {
+    private void GoToHome()
+    {
+        Navigation.NavigateTo("/");
+    }
+
+    private void GoToUserProfile()
+    {
+        Navigation.NavigateTo("/user/123");
+    }
+
+    private void GoBack()
+    {
+        Navigation.NavigateTo("/previous-page");
+    }
+
+    private void OpenExternal()
+    {
+        Navigation.NavigateTo("https://www.hwtx.top", forceLoad: true);
+    }
+}

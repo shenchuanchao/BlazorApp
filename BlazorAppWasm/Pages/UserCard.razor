@@ -1,0 +1,15 @@
+﻿<div class="user-card">
+    <img src="@AvatarUrl" alt="@UserName" />
+    <div class="user-info">
+        <h4>@UserName</h4>
+        <p>@Email</p>
+        <p>注册时间: @JoinDate.ToString("yyyy-MM-dd")</p>
+    </div>
+</div>
+
+@code {
+    [Parameter] public string UserName { get; set; } = string.Empty;
+    [Parameter] public string Email { get; set; } = string.Empty;
+    [Parameter] public string AvatarUrl { get; set; } = string.Empty;
+    [Parameter] public DateTime JoinDate { get; set; }
+}

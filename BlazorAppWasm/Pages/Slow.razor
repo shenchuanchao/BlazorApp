@@ -1,0 +1,52 @@
+﻿@page "/slow"
+@implements IDisposable
+@inject PersistentComponentState ApplicationState
+
+<h2>Slow Component</h2>
+
+@if (data is null)
+{
+    <div><em>Loading...</em></div>
+}
+else
+{
+    <div>@data</div>
+}
+
+@code {
+    private string? data;
+    private PersistingComponentStateSubscription persistingSubscription;
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (!ApplicationState.TryTakeFromJson<string>(nameof(data), out var restored))
+        {
+            data = await LoadDataAsync();
+        }
+        else
+        {
+            data = restored!;
+        }
+
+        // Call at the end to avoid a potential race condition at app shutdown
+        persistingSubscription = ApplicationState.RegisterOnPersisting(PersistData);
+    }
+
+    private Task PersistData()
+    {
+        ApplicationState.PersistAsJson(nameof(data), data);
+
+        return Task.CompletedTask;
+    }
+
+    private async Task<string> LoadDataAsync()
+    {
+        await Task.Delay(5000);
+        return "Finished!";
+    }
+
+    void IDisposable.Dispose()
+    {
+        persistingSubscription.Dispose();
+    }
+}

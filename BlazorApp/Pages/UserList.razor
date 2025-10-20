@@ -1,0 +1,71 @@
+﻿<h3>用户列表</h3>
+
+<table>
+	<thead>
+		<tr>
+			<th>Name</th>
+			<th>Age</th>
+			<th>Gender</th>
+		</tr>
+	</thead>
+	<tbody>
+
+		@foreach (var item in list)
+		{
+			<tr>
+				<td>@item.Name</td>
+				<td>@item.Age</td>
+				@switch (item.Gender)
+				{
+					case 0:
+						{
+							<td>男</td>
+							break;
+						}
+					case 1:
+						{
+							<td>女</td>
+							break;
+						}
+					case 2:
+						{
+							<td>未知</td>
+							break;
+						}
+
+				}
+			</tr>
+		}
+	</tbody>
+
+</table>
+
+
+@code {
+	List<User> list = new List<User>();
+	User User1 = new User()
+		{
+			Name = "John",
+			Age = 20,
+			Gender = 2,
+		};
+	User User2 = new User()
+		{
+			Name = "Sub",
+			Age = 22,
+			Gender = 0,
+		};
+	protected override void OnInitialized()
+	{
+		list.Add(User1);
+		list.Add(User2);
+	}
+
+	public class User
+	{
+		public string Name { get; set; } = string.Empty;
+		public int Age { get; set; }
+		public int Gender { get; set; } // 0: 男, 1: 女, 2: 未知
+		
+	}
+}

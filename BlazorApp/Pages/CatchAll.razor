@@ -1,0 +1,10 @@
+﻿<!-- Pages/CatchAll.razor -->
+@page "/docs/{*path}"
+
+<h1>文档查看器</h1>
+<p>请求的路径: @Path</p>
+
+@code {
+    [Parameter]
+    public string? Path { get; set; }
+}

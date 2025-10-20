@@ -1,0 +1,21 @@
+﻿<!-- Pages/Dashboard.razor -->
+@page "/dashboard"
+@layout MainLayout
+
+<h1>仪表板</h1>
+
+
+@inherits LayoutComponentBase
+
+<div class="admin-layout">
+    <nav class="sidebar">
+        <h3>管理菜单</h3>
+        <NavLink href="/dashboard" Match="NavLinkMatch.All">仪表板</NavLink>
+        <NavLink href="/users">用户管理</NavLink>
+        <NavLink href="/settings">系统设置</NavLink>
+    </nav>
+
+    <main class="main-content">
+        @Body
+    </main>
+</div>

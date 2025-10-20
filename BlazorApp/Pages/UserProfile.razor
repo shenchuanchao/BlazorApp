@@ -1,0 +1,16 @@
+﻿<!-- Pages/UserProfile.razor -->
+@page "/user/{UserName}"
+
+<h1>用户资料</h1>
+<p>用户ID: @UserName</p>
+
+@code {
+    [Parameter]
+    public string UserName { get; set; }
+
+    protected override void OnParametersSet()
+    {
+        // 参数变化时执行
+        Console.WriteLine($"加载用户 {UserName} 的资料");
+    }
+}

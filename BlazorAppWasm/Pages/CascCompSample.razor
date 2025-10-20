@@ -1,0 +1,17 @@
+﻿<!--this is CascCompSample.razor-->
+@page "/cascparamsample"
+
+<h3>This is the sample page</h3>
+<CascadingValue Value="NickName" Name="NickName">
+    <CascadingValue Value="36" Name="Age">
+        <CascadingValue Value="Sex" Name="Sex">
+            <CascComp1></CascComp1>
+        </CascadingValue>
+    </CascadingValue>
+</CascadingValue>
+
+@code
+{
+    private string? NickName = "Bigname365";
+    private string Sex = "男";
+}

@@ -1,0 +1,71 @@
+﻿<!-- ComplexObjectBinding.razor -->
+@page "/complex"
+<div class="complex-binding">
+    <h3>复杂对象绑定</h3>
+
+    <div class="form-section">
+        <h4>用户信息</h4>
+
+        <div class="form-group">
+            <label>姓名:</label>
+            <input @bind="currentUser.Name" class="form-control" />
+        </div>
+
+        <div class="form-group">
+            <label>年龄:</label>
+            <input @bind="currentUser.Age" type="number" class="form-control" />
+        </div>
+
+        <div class="form-group">
+            <label>地址:</label>
+            <input @bind="currentUser.Address.Street" class="form-control" placeholder="街道" />
+            <input @bind="currentUser.Address.City" class="form-control" placeholder="城市" />
+        </div>
+    </div>
+
+    <div class="display-section">
+        <h4>当前用户信息:</h4>
+        <pre>@userInfoJson</pre>
+    </div>
+
+    <button @onclick="ResetUser" class="btn btn-warning">重置用户</button>
+    <button @onclick="CreateNewUser" class="btn btn-success">创建新用户</button>
+</div>
+
+@code {
+    private User currentUser = new User();
+
+    private string userInfoJson =>
+        System.Text.Json.JsonSerializer.Serialize(currentUser, new System.Text.Json.JsonSerializerOptions
+            {
+                WriteIndented = true
+            });
+
+    private void ResetUser()
+    {
+        currentUser = new User();
+    }
+
+    private void CreateNewUser()
+    {
+        currentUser = new User
+            {
+                Name = "新用户",
+                Age = 18,
+                Address = new Address { Street = "新建街道", City = "新建城市" }
+            };
+    }
+
+    class User
+    {
+        public string Name { get; set; } = string.Empty;
+        public int Age { get; set; }
+        public Address Address { get; set; } = new Address();
+    }
+
+    class Address
+    {
+        public string Street { get; set; } = string.Empty;
+        public string City { get; set; } = string.Empty;
+    }
+}
