@@ -1,0 +1,64 @@
+﻿@page "/testhttp"
+@inject HttpClient Http
+
+<h3>HTTP Client 测试</h3>
+
+@if (isLoading)
+{
+    <p>正在测试连接...</p>
+}
+else
+{
+    <div>
+        <p><strong>状态:</strong> @testStatus</p>
+        <p><strong>详情:</strong> @testDetails</p>
+        <pre>@jsondata</pre>
+        <img src="@imgurl" alt="测试图片" style="max-height:50vh" />
+    </div>
+}
+
+<button class="btn btn-primary" @onclick="TestConnection">测试连接</button>
+
+@code {
+    private bool isLoading = false;
+    private string testStatus = "未测试";
+    private string testDetails = "";
+    private string jsondata = "";
+    private string imgurl = "https://images.xxapi.cn/images/meinv/thy.jpg";
+
+    private async Task TestConnection()
+    {
+        isLoading = true;
+        testStatus = "测试中...";
+        StateHasChanged();
+
+        try
+        {
+            // 测试本地连接
+            var response = await Http.GetAsync("https://v2.xxapi.cn/api/meinvpic");
+            testStatus = response.IsSuccessStatusCode ? "成功" : "失败";
+            testDetails = $"状态码: {response.StatusCode}";
+            jsondata = await response.Content.ReadAsStringAsync();
+            //将jsondata转换为动态对象以提取图片URL
+            var jsonObj = System.Text.Json.JsonDocument.Parse(jsondata);
+            //假设返回的JSON结构中有一个字段"data"的值为图片URL
+            if (jsonObj.RootElement.TryGetProperty("data", out var dataElement))
+            {
+				imgurl = dataElement.GetString() ?? "";
+            }
+
+			
+
+        }
+        catch (Exception ex)
+        {
+            testStatus = "错误";
+            testDetails = ex.Message;
+        }
+        finally
+        {
+            isLoading = false;
+            StateHasChanged();
+        }
+    }
+}

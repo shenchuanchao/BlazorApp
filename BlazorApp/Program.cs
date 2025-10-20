@@ -8,6 +8,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddSingleton<WeatherForecastService>();
+// 注册 HttpClient
+builder.Services.AddHttpClient();
 
 // Program.cs 中的路由配置
 builder.Services.Configure<RouteOptions>(options =>
