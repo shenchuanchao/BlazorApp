@@ -1,0 +1,30 @@
+﻿<CascadingValue Value="this">
+    @ChildContent
+</CascadingValue>
+
+@code {
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
+
+    private string theme = "light";
+    public string Theme
+    {
+        get => theme;
+        set
+        {
+            if (theme != value)
+            {
+                theme = value;
+                StateHasChanged();
+            }
+        }
+    }
+
+    public event Action? OnThemeChanged;
+
+    public void ToggleTheme()
+    {
+        Theme = Theme == "light" ? "dark" : "light";
+        OnThemeChanged?.Invoke();
+    }
+}

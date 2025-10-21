@@ -1,0 +1,19 @@
+﻿<!-- MyComponent.razor -->
+<h3>计数器: @count</h3>
+<button @onclick="Increment">增加</button>
+
+@code {
+    private int count = 0;
+
+    public void Increment()
+    {
+        count++;
+        StateHasChanged();
+    }
+
+    public void Reset()
+    {
+        count = 0;
+        StateHasChanged();
+    }
+}

@@ -1,0 +1,14 @@
+﻿<!-- ParentComponent.razor -->
+@page "/parent"
+
+<MyComponent @ref="myComponentRef" />
+<button @onclick="ResetChild">重置子组件</button>
+
+@code {
+    private MyComponent? myComponentRef;
+
+    private void ResetChild()
+    {
+        myComponentRef?.Reset();
+    }
+}

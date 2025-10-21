@@ -1,0 +1,17 @@
+﻿<h3>CounterComponent</h3>
+<p>The counter value is @Counter</p>
+<button @onclick="CounterChangedFromChild">Update Counter from Child</button>
+@code {
+    [Parameter]
+    public int Counter { get; set; }
+
+    [Parameter]
+    public EventCallback<int> OnCounterChanged { get; set; }
+
+    private async Task CounterChangedFromChild()
+    {
+        Counter++;
+        await OnCounterChanged.InvokeAsync(Counter);    
+    }
+
+}

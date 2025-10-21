@@ -1,0 +1,27 @@
+﻿<!-- ConsumerComponent.razor -->
+
+<div class="@($"app-{appState.Theme}")">
+    <h3>当前主题: @appState.Theme</h3>
+    <button @onclick="appState.ToggleTheme">切换主题</button>
+</div>
+
+@code {
+    [CascadingParameter]
+    public AppStateProvider appState { get; set; } = default!;
+
+    protected override void OnInitialized()
+    {
+        if (appState != null)
+        {
+            appState.OnThemeChanged += StateHasChanged;
+        }
+    }
+
+    public void Dispose()
+    {
+        if (appState != null)
+        {
+            appState.OnThemeChanged -= StateHasChanged;
+        }
+    }
+}

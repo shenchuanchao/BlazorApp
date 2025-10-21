@@ -1,39 +1,54 @@
 ﻿@page "/"
 @page "/home"
+@inject IJSRuntime JSRuntime
 
 <h1>欢迎来到首页</h1>
 <p>当前时间: @DateTime.Now</p>
 @if (isLoading)
 {
-    <p>加载中...</p>
+	<p>加载中...</p>
 }
 else
 {
-    <p>加载完成！</p>
+	<p>加载完成！</p>
 }
 @if (userRole == "Admin")
 {
-    <p>欢迎管理员！</p>
+	<p>欢迎管理员！</p>
 }
 else if (userRole == "User")
 {
-    <p>欢迎普通用户！</p>
+	<p>欢迎普通用户！</p>
 }
 else
 {
-    <p>请登录。</p>
+	<p>请登录。</p>
 }
+
+<ConsumerComponent />
+<div @ref="myDiv" style="width: 100px; height: 100px; background: red;"></div>
+<button @onclick="ChangeDivStyle">修改样式</button>
+
+
+
 @code {
-    private bool isLoading = true;
-    private string userRole = "Admin";
-    protected override void OnInitialized()
-    {
-        // 模拟加载完成
-        Task.Delay(2000).ContinueWith(_ =>
-        {
-            isLoading = false;
-            InvokeAsync(StateHasChanged);
-        });
-    }
+	private bool isLoading = true;
+	private string userRole = "Admin";
+	protected override void OnInitialized()
+	{
+		// 模拟加载完成
+		Task.Delay(2000).ContinueWith(_ =>
+		{
+			isLoading = false;
+			InvokeAsync(StateHasChanged);
+		});
+	}
+
+	private ElementReference myDiv;
+
+	private async Task ChangeDivStyle()
+	{
+		await JSRuntime.InvokeVoidAsync("changeElementStyle", myDiv);
+	}
 
 }

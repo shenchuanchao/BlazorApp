@@ -1,0 +1,29 @@
+﻿@page "/counter1"
+@using BlazorApp.Store
+@using Fluxor
+@inherits Fluxor.Blazor.Web.Components.FluxorComponent
+@inject IState<CounterState> CounterState
+@inject IDispatcher Dispatcher
+
+<h3>Counter 1</h3>
+<p>计数器: @CounterState.Value.CurrentCount</p>
+<button class="btn btn-primary" @onclick="IncrementCount">Increment</button>
+<button class="btn btn-secondary" @onclick="DecrementCount">Decrement</button>
+<button class="btn btn-info" @onclick="ResetCount">Reset</button>
+
+@code {
+    private void IncrementCount()
+    {
+        Dispatcher.Dispatch(new IncrementCounterAction());
+    }
+
+    private void DecrementCount()
+    {
+        Dispatcher.Dispatch(new DecrementCounterAction());
+    }
+
+    private void ResetCount()
+    {
+        Dispatcher.Dispatch(new SetCountAction(0));
+    }
+}

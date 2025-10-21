@@ -1,0 +1,65 @@
+﻿@page "/loop-ref-example"
+
+<h3>循环中使用 ref 示例</h3>
+
+<button @onclick="ShowAllMessages" class="btn btn-primary">显示所有消息</button>
+<button @onclick="UpdateAllMessages" class="btn btn-secondary">更新所有消息</button>
+
+@for (int i = 0; i < items.Count; i++)
+{
+    var index = i; // 重要：创建局部变量
+    <ChildComponent @key="items[index].Id"
+                    @ref="componentRefs[index]"
+                    Message="items[index].Message"
+                    OnMessageChanged="HandleMessageChanged" />
+}
+
+@code {
+    private List<ItemModel> items = new();
+    private List<ChildComponent?> componentRefs = new();
+
+    protected override void OnInitialized()
+    {
+        items = new List<ItemModel>
+        {
+            new ItemModel { Id = 1, Message = "第一条消息" },
+            new ItemModel { Id = 2, Message = "第二条消息" },
+            new ItemModel { Id = 3, Message = "第三条消息" }
+        };
+
+        // 初始化引用列表
+        componentRefs = new List<ChildComponent?>(new ChildComponent[items.Count]);
+    }
+
+    private void ShowAllMessages()
+    {
+        foreach (var component in componentRefs)
+        {
+            component?.ShowCurrentMessage();
+        }
+    }
+
+    private void UpdateAllMessages()
+    {
+        for (int i = 0; i < componentRefs.Count; i++)
+        {
+            componentRefs[i]?.UpdateMessage($"更新后的消息 {items[i].Id}");
+        }
+    }
+
+    private void HandleMessageChanged((int Id, string Message) data)
+    {
+        var item = items.FirstOrDefault(i => i.Id == data.Id);
+        if (item != null)
+        {
+            item.Message = data.Message;
+            StateHasChanged(); // 可选：如果需要更新UI
+        }
+    }
+
+    public class ItemModel
+    {
+        public int Id { get; set; }
+        public string Message { get; set; } = string.Empty;
+    }
+}

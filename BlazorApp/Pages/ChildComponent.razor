@@ -1,0 +1,41 @@
+﻿<!-- ChildComponent.razor -->
+<div class="child-component">
+    <h5>子组件 ID: @Id</h5>
+    <p>当前消息: <strong>@Message</strong></p>
+    <input @bind="currentMessage" @bind:event="oninput" />
+    <button @onclick="UpdateMessage" class="btn btn-sm btn-info">更新消息</button>
+</div>
+
+@code {
+    [Parameter]
+    public int Id { get; set; }
+
+    [Parameter]
+    public string Message { get; set; } = string.Empty;
+
+    [Parameter]
+    public EventCallback<(int Id, string Message)> OnMessageChanged { get; set; }
+
+    private string currentMessage = string.Empty;
+
+    protected override void OnParametersSet()
+    {
+        currentMessage = Message;
+    }
+
+    private async Task UpdateMessage()
+    {
+        await OnMessageChanged.InvokeAsync((Id, currentMessage));
+    }
+
+    public void ShowCurrentMessage()
+    {
+        Console.WriteLine($"组件 {Id} 的消息: {Message}");
+    }
+
+    public void UpdateMessage(string newMessage)
+    {
+        currentMessage = newMessage;
+        UpdateMessage().Wait();
+    }
+}

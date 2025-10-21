@@ -1,4 +1,10 @@
 ﻿@page "/counter"
+@using BlazorApp.Service
+@inject ICounterService CounterService
+@inject GlobalStateService GlobalState
+@inject AppState AppState
+@implements IDisposable
+
 
 <PageTitle>Counter</PageTitle>
 
@@ -7,12 +13,79 @@
 <p role="status">Current count: @currentCount</p>
 
 <button class="btn btn-primary" @onclick="IncrementCount">Click me</button>
+<button class="btn btn-primary" @onclick="DecrementCount">Click me</button>
+<button @onclick="ReSetCount">重置</button>
+
+<CounterComponent Counter="@currentCount" OnCounterChanged="HandleCounterChanged" />
+
+<p>The global counter value is @GlobalState.Counter</p>
+
+<button @onclick="IncrementCounter">Increment</button>
+
+
+
+<h3>计数器: @AppState.Counter</h3>
+<h4>用户: @AppState.UserName</h4>
+
+<button @onclick="AppState.IncrementCounter">增加计数</button>
+<input @bind="localUserName" @bind:event="onchange" placeholder="输入用户名" />
+
 
 @code {
-    private int currentCount = 0;
+	private int currentCount = 0;
+	private string localUserName
+	{
+		get => AppState.UserName;
+		set
+		{
+			AppState.UserName = value;
+			// 可以在这里添加其他逻辑
+		}
+	}
 
-    private void IncrementCount()
-    {
-        currentCount++;
-    }
+	protected override void OnInitialized()
+	{
+		AppState.OnCounterChanged += StateHasChanged;
+		AppState.OnUserNameChanged += StateHasChanged;
+	}
+
+	private void IncrementCount()
+	{
+		//currentCount++;
+		currentCount = CounterService.Increment(currentCount);
+	}
+
+	private void DecrementCount()
+	{
+		currentCount = CounterService.Decrement(currentCount);
+	}
+
+	private void ReSetCount()
+	{
+		currentCount = 0;
+	}
+
+	private void HandleCounterChanged(int counter)
+	{
+		currentCount = counter;
+		Console.WriteLine($"The counter value is {counter}");
+	}
+	
+	private void IncrementCounter()
+	{
+		GlobalState.Counter++;
+	}
+	
+	private void UpdateUserName()
+	{
+		AppState.UserName = localUserName;
+	}
+
+	public void Dispose()
+	{
+		AppState.OnCounterChanged -= StateHasChanged;
+		AppState.OnUserNameChanged -= StateHasChanged;
+	}
+
+
 }

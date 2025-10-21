@@ -1,0 +1,13 @@
+﻿@page "/element-ref"
+
+<input @ref="usernameInput" placeholder="输入用户名" />
+<button @onclick="FocusInput">聚焦输入框</button>
+
+@code {
+    private ElementReference usernameInput;
+
+    private async Task FocusInput()
+    {
+        await usernameInput.FocusAsync();
+    }
+}

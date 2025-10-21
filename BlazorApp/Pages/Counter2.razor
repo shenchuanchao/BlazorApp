@@ -1,0 +1,53 @@
+﻿@page "/counter2"
+@inject IJSRuntime JSRuntime
+
+<h3>持久化计数器: @count</h3>
+<button @onclick="Increment">增加并保存</button>
+
+@code {
+    private int count = 0;
+    private bool isInitialized = false;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await LoadFromStorage();
+            isInitialized = true;
+            StateHasChanged(); // 确保在加载后更新UI
+        }
+    }
+
+    private async Task Increment()
+    {
+        count++;
+        await SaveToStorage();
+        //StateHasChanged();
+    }
+
+    private async Task SaveToStorage()
+    {
+        if (isInitialized)
+        {
+            await JSRuntime.InvokeVoidAsync("localStorage.setItem", "counter", count);
+        }
+    }
+
+    private async Task LoadFromStorage()
+    {
+        try
+        {
+            var savedCount = await JSRuntime.InvokeAsync<string>("localStorage.getItem", "counter");
+            if (int.TryParse(savedCount, out int result))
+            {
+                count = result;
+            }
+        }
+        catch (Exception ex)
+        {
+            // 处理预渲染期间的 JS 互操作错误
+            Console.WriteLine($"加载存储时出错: {ex.Message}");
+        }
+    }
+
+}
