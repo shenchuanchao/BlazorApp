@@ -1,0 +1,37 @@
+﻿@page "/user-form"
+@using BlazorApp.Data  <!-- 根据实际使用的库引入命名空间 -->
+@using Blazored.FluentValidation
+@using FluentValidation
+
+<EditForm Model="@user" OnValidSubmit="HandleValidSubmit">
+    <!-- 使用 FluentValidation 验证器 -->
+    <FluentValidationValidator />
+
+    <div class="form-group">
+        <label for="name">姓名：</label>
+        <InputText id="name" @bind-Value="user.Name" class="form-control" />
+        <!-- 显示该字段的验证消息 -->
+        <ValidationMessage For="@(() => user.Name)" />
+    </div>
+
+    <div class="form-group">
+        <label for="email">邮箱：</label>
+        <InputText id="email" @bind-Value="user.Email" class="form-control" />
+        <ValidationMessage For="@(() => user.Email)" />
+    </div>
+
+    <button type="submit" class="btn btn-primary">提交</button>
+    <!-- 显示验证摘要 -->
+    <ValidationSummary />
+</EditForm>
+
+@code {
+    private User user = new User();
+
+    private void HandleValidSubmit()
+    {
+        // 当表单通过所有验证时，会执行此方法
+        Console.WriteLine($"提交用户：{user.Name}, {user.Email}");
+        // 这里可以添加提交数据到服务器的逻辑
+    }
+}

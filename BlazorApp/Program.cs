@@ -1,6 +1,8 @@
+using BlazorApp;
 using BlazorApp.Data;
 using BlazorApp.Service;
 using BlazorApp.Store;
+using FluentValidation;
 using Fluxor;
 using Fluxor.Blazor.Web.ReduxDevTools;
 
@@ -14,6 +16,8 @@ builder.Services.AddSingleton<WeatherForecastService>();
 builder.Services.AddSingleton<ICounterService, CounterService>();
 builder.Services.AddSingleton<GlobalStateService>();
 builder.Services.AddScoped<AppState>();
+
+builder.Services.AddTransient<IValidator<User>, UserValidator>();
 // ×¢²á HttpClient
 builder.Services.AddHttpClient();
 // ×¢²á Fluxor - ÕâÊÇ¹Ø¼ü£¡
