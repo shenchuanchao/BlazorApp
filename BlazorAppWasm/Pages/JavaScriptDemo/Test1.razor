@@ -1,0 +1,71 @@
+﻿@page "/jstest1"
+@inject IJSRuntime JSRuntime
+
+<div class="demo-container">
+    <h3>JavaScript函数调用演示</h3>
+
+    <button @onclick="ShowSuccessNotification" class="btn btn-success">
+        显示成功提示
+    </button>
+
+    <button @onclick="ShowErrorNotification" class="btn btn-danger">
+        显示错误提示
+    </button>
+
+    <button @onclick="GetBrowserInfo" class="btn btn-info">
+        获取浏览器信息
+    </button>
+
+    <button @onclick="CalculatePrice" class="btn btn-warning">
+        计算折扣价格
+    </button>
+    @if (!string.IsNullOrEmpty(browserInfo))
+    {
+        <div class="alert alert-info mt-3">
+            <strong>浏览器信息:</strong> @browserInfo
+        </div>
+    }
+
+    @if (discountResult > 0)
+    {
+        <div class="alert alert-success mt-3">
+            <strong>折扣价格:</strong> ￥@discountResult
+        </div>
+    }
+</div>
+@code {
+    private string browserInfo = "";
+    private decimal discountResult;
+
+    private async Task ShowSuccessNotification()
+    {
+        await JSRuntime.InvokeVoidAsync("myJsHelpers.showNotification",
+            "操作成功！数据已保存。", "success");
+    }
+
+    private async Task ShowErrorNotification()
+    {
+        await JSRuntime.InvokeVoidAsync("myJsHelpers.showNotification",
+            "出错了！请检查网络连接。", "error");
+    }
+
+    private async Task GetBrowserInfo()
+    {
+        var info = await JSRuntime.InvokeAsync<BrowserInfo>("myJsHelpers.getBrowserInfo");
+        browserInfo = $"语言: {info.Language}, 平台: {info.Platform}";
+    }
+
+    private async Task CalculatePrice()
+    {
+        discountResult = await JSRuntime.InvokeAsync<decimal>(
+            "myJsHelpers.calculateDiscount", 1000, 20); // 原价1000，8折
+    }
+
+    // 定义接收复杂对象的类
+    private class BrowserInfo
+    {
+        public string UserAgent { get; set; }
+        public string Language { get; set; }
+        public string Platform { get; set; }
+    }
+}

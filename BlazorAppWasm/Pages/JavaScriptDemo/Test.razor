@@ -1,0 +1,11 @@
+﻿@page "/jstest"
+@inject IJSRuntime JSRuntime
+
+<button @onclick="ShowAlert">点我弹窗！</button>
+@code {
+    private async Task ShowAlert()
+    {
+        await JSRuntime.InvokeVoidAsync("alert", "Hello from Blazor!");
+    }
+}
+
