@@ -20,6 +20,9 @@
         <a class="dismiss">🗙</a>
     </div>
     <script src="_framework/blazor.webassembly.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="js/chart.js"></script>
     <script>
         // 创建命名空间避免全局污染
         window.myJsHelpers = {
@@ -68,7 +71,6 @@
             }
         };
 
-        //demo1
         function registerDotNetHelper(dotNetHelper) {
             // 存储.NET引用供后续使用
             window.dotNetHelper = dotNetHelper;
@@ -98,12 +100,13 @@
                 output.innerHTML = `
                 <strong>来自.NET的消息:</strong> ${message}<br>
                 <strong>处理后的数据:</strong> ${processed}
-                `;
+            `;
 
             } catch (error) {
                 console.error('调用.NET方法失败:', error);
             }
         }
+
     </script>
 </body>
 

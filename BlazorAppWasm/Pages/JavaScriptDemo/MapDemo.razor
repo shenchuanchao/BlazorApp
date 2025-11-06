@@ -1,0 +1,50 @@
+﻿@page "/jsdemo/map"
+@inject IJSRuntime JSRuntime
+
+<div class="map-demo">
+    <h3>地图集成演示</h3>
+    <div id="mapContainer" style="height: 300px; border: 1px solid #ccc; margin: 10px 0;">
+        <div style="display: flex; align-items: center; justify-content: center; height: 100%; color: #666;">
+            地图加载中...
+        </div>
+    </div>
+
+    <button @onclick="AddMarker" class="btn btn-success">添加标记</button>
+    <button @onclick="GetCurrentLocation" class="btn btn-info">获取位置</button>
+
+    @if (!string.IsNullOrEmpty(currentLocation))
+    {
+        <div class="alert alert-info mt-2">
+            当前位置: @currentLocation
+        </div>
+    }
+</div>
+@code {
+    private string currentLocation = "";
+
+    private async Task AddMarker()
+    {
+        await JSRuntime.InvokeVoidAsync("console.log", "添加地图标记...");
+
+        // 模拟添加标记
+        currentLocation = $"标记位置: 经度 {new Random().Next(116, 117)}, 纬度 {new Random().Next(39, 40)}";
+        StateHasChanged();
+    }
+
+    private async Task GetCurrentLocation()
+    {
+        try
+        {
+            // 模拟获取地理位置
+            var location = await JSRuntime.InvokeAsync<string>("prompt", "请输入您的位置:");
+            if (!string.IsNullOrEmpty(location))
+            {
+                currentLocation = $"您的位置: {location}";
+            }
+        }
+        catch (Exception ex)
+        {
+            currentLocation = $"获取位置失败: {ex.Message}";
+        }
+    }
+}
