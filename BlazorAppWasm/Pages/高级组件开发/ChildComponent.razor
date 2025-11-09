@@ -1,0 +1,23 @@
+﻿<!-- ChildComponent.razor -->
+
+<div class="card">
+    <div class="card-header">
+        @Title
+    </div>
+    <div class="card-body">
+        @ChildContent
+    </div>
+    <div class="card-footer">
+        @FooterContent
+    </div>
+</div>
+@code {
+    [Parameter]
+    public string Title { get; set; } = "Default Title";
+
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
+
+    [Parameter]
+    public RenderFragment? FooterContent { get; set; }
+}

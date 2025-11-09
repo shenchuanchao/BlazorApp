@@ -1,0 +1,15 @@
+﻿
+<h3>TodoList</h3>
+<div class="todo-list">
+    <h4>@Title</h4>
+    <ul>
+        <li>学习Blazor组件开发</li>
+        <li>完成待办事项列表</li>
+        <li>测试动态组件加载</li>
+    </ul>
+</div>
+
+@code {
+    [Parameter]
+    public string Title { get; set; } = "我的待办事项";
+}

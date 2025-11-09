@@ -1,0 +1,18 @@
+﻿<!-- DataListComponent.razor -->
+<div class="data-list">
+    <h3>@Title</h3>
+    @foreach (var item in Items)
+    {
+        @ItemTemplate(item)
+    }
+</div>
+@code {
+    [Parameter]
+    public string Title { get; set; } = "数据列表";
+
+    [Parameter]
+    public IEnumerable<object>? Items { get; set; }
+
+    [Parameter]
+    public RenderFragment<object>? ItemTemplate { get; set; }
+}

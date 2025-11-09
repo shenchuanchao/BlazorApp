@@ -1,0 +1,54 @@
+﻿<!-- DynamicComponentContainer.razor -->
+@page "/advanced/component/dynamic-container"
+@using Microsoft.AspNetCore.Components
+
+<div class="dynamic-container">
+    @if (CurrentComponentType != null)
+    {
+        <DynamicComponent Type="CurrentComponentType" Parameters="CurrentParameters" />
+    }
+    else
+    {
+        <div class="placeholder">
+            <p>请选择要显示的组件</p>
+        </div>
+    }
+</div>
+<div class="component-selector">
+    <button class="btn btn-outline-primary" @onclick="() => ShowComponent(typeof(Counter))">
+        显示计数器
+    </button>
+    <button class="btn btn-outline-primary" @onclick="() => ShowComponent(typeof(FetchData))">
+        显示数据获取
+    </button>
+    <button class="btn btn-outline-primary" @onclick="() => ShowComponent(typeof(TodoList))">
+        显示待办事项
+    </button>
+</div>
+@code {
+    private Type? CurrentComponentType { get; set; }
+    private Dictionary<string, object> CurrentParameters { get; set; } = new();
+
+    private void ShowComponent(Type componentType)
+    {
+        CurrentComponentType = componentType;
+        CurrentParameters = GetParametersForComponent(componentType);
+        StateHasChanged();
+    }
+
+    private Dictionary<string, object> GetParametersForComponent(Type componentType)
+    {
+        var parameters = new Dictionary<string, object>();
+
+        if (componentType == typeof(Counter))
+        {
+            parameters["IncrementAmount"] = 5;
+        }
+        else if (componentType == typeof(TodoList))
+        {
+            parameters["Title"] = "动态待办事项-DynamicComponentContainer";
+        }
+
+        return parameters;
+    }
+}
