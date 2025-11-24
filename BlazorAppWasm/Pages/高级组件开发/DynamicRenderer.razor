@@ -1,0 +1,83 @@
+﻿<!-- DynamicRenderer.razor -->
+@page "/advanced/component/dynamic-renderer"
+@using Microsoft.AspNetCore.Components.Rendering
+
+<div class="dynamic-container">
+    @foreach (var componentType in ComponentTypes)
+    {
+        <div class="dynamic-component">
+            @{
+                var index = ComponentTypes.IndexOf(componentType);
+                BuildComponent(index);
+            }
+        </div>
+    }
+
+    <SmartComponentRenderer ComponentName="Counter"></SmartComponentRenderer>
+</div>
+@code {
+    [Parameter]
+    public List<Type> ComponentTypes { get; set; } = new();
+
+    [Parameter]
+    public Dictionary<Type, Dictionary<string, object>> ComponentParameters { get; set; } = new();
+
+    //初始化
+    protected override async Task OnInitializedAsync()
+    {
+        ComponentTypes.Add(typeof(DataListComponent));
+        ComponentTypes.Add(typeof(Counter));
+
+        ComponentParameters.Add(typeof(DataListComponent), new Dictionary<string, object>
+        {
+            { "Title", "动态数据列表" },
+            { "Items", new List<object>
+                {new { Id = 1, Name = "张三", Email = ""}}
+            },
+            { "ItemTemplate", (RenderFragment<object>)(context => builder =>
+                {
+                    var item = context as dynamic;
+                    builder.OpenElement(0, "div");
+                    builder.AddContent(1, $"ID: {item.Id}, Name: {item.Name}, Email: {item.Email}");
+                    builder.CloseElement();
+                })
+            }
+        });
+
+
+
+    }
+
+    private void BuildComponent(int sequence)
+    {
+        var componentType = ComponentTypes[sequence];
+        var parameters = ComponentParameters.ContainsKey(componentType)
+            ? ComponentParameters[componentType]
+            : new Dictionary<string, object>();
+
+    }
+
+
+
+    // protected override void BuildRenderTree(RenderTreeBuilder builder)
+    // {
+    //     for (int i = 0; i < ComponentTypes.Count; i++)
+    //     {
+    //         builder.OpenElement(i * 2, "div");
+    //         builder.AddAttribute(i * 2 + 1, "class", "dynamic-component");
+
+    //         builder.OpenComponent(i * 2 + 2, ComponentTypes[i]);
+
+    //         if (ComponentParameters.ContainsKey(ComponentTypes[i]))
+    //         {
+    //             foreach (var param in ComponentParameters[ComponentTypes[i]])
+    //             {
+    //                 builder.AddAttribute(i * 2 + 3, param.Key, param.Value);
+    //             }
+    //         }
+
+    //         builder.CloseComponent();
+    //         builder.CloseElement();
+    //     }
+    // }
+}

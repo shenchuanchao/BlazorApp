@@ -1,0 +1,44 @@
+﻿<!-- SmartComponentRenderer.razor -->
+@using Microsoft.AspNetCore.Components
+
+<DynamicComponent Type="ResolveComponentType()"
+                  Parameters="ResolveParameters()" />
+
+@code {
+    [Parameter]
+    public string ComponentName { get; set; } = string.Empty;
+
+    [Parameter]
+    public Dictionary<string, object>? InputParameters { get; set; }
+
+    [Parameter]
+    public EventCallback<Dictionary<string, object>> OnParametersResolved { get; set; }
+
+    private Type ResolveComponentType()
+    {
+        return ComponentName switch
+        {
+            "Counter" => typeof(Counter),
+            "TodoList" => typeof(TodoList),
+            "FetchData" => typeof(FetchData),
+            "Weather" => typeof(FetchData), // 别名
+            _ => typeof(NotFoundComponent)
+        };
+    }
+
+    private Dictionary<string, object> ResolveParameters()
+    {
+        var parameters = InputParameters ?? new Dictionary<string, object>();
+
+        // 添加默认参数
+        if (ComponentName == "Counter" && !parameters.ContainsKey("IncrementAmount"))
+        {
+            parameters["IncrementAmount"] = 1;
+        }
+
+        // 通知参数解析完成
+        OnParametersResolved.InvokeAsync(parameters);
+
+        return parameters;
+    }
+}
